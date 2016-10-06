@@ -95,7 +95,7 @@ CgiUploadFlashDef uploadParams={
 	.fw2Pos=0,
 	.fwSize=ESPFS_SIZE,
 };
-#define INCLUDE_FLASH_FNS
+//#define INCLUDE_FLASH_FNS
 #endif
 #ifdef OTA_FLASH_SIZE_K
 CgiUploadFlashDef uploadParams={
@@ -121,16 +121,14 @@ should be placed above the URLs they protect.
 HttpdBuiltInUrl builtInUrls[]={
 	{"*", cgiRedirectApClientToHostname, "esp8266.nonet"},
 	{"/", cgiRedirect, "/index.tpl"},
-	{"/flash.bin", cgiReadFlash, NULL},
-	{"/led.tpl", cgiEspFsTemplate, tplLed},
+//	{"/led.tpl", cgiEspFsTemplate, tplLed},
 	{"/index.tpl", cgiEspFsTemplate, tplCounter},
-	{"/led.cgi", cgiLed, NULL},
-	{"/flash/download", cgiReadFlash, NULL},
+//	{"/led.cgi", cgiLed, NULL},
 #ifdef INCLUDE_FLASH_FNS
 	{"/flash/next", cgiGetFirmwareNext, &uploadParams},
 	{"/flash/upload", cgiUploadFirmware, &uploadParams},
 #endif
-	{"/flash/reboot", cgiRebootFirmware, NULL},
+//	{"/flash/reboot", cgiRebootFirmware, NULL},
 
 	//Routines to make the /wifi URL and everything beneath it work.
 
@@ -145,8 +143,8 @@ HttpdBuiltInUrl builtInUrls[]={
 	{"/wifi/connstatus.cgi", cgiWiFiConnStatus, NULL},
 	{"/wifi/setmode.cgi", cgiWiFiSetMode, NULL},
 
-	{"/websocket/ws.cgi", cgiWebsocket, myWebsocketConnect},
-	{"/websocket/echo.cgi", cgiWebsocket, myEchoWebsocketConnect},
+//	{"/websocket/ws.cgi", cgiWebsocket, myWebsocketConnect},
+//	{"/websocket/echo.cgi", cgiWebsocket, myEchoWebsocketConnect},
 
 	{"/test", cgiRedirect, "/test/index.html"},
 	{"/test/", cgiRedirect, "/test/index.html"},
