@@ -1,0 +1,51 @@
+~~~~~~~~~~~~LOG~~~~~~~~~~~~
+06/09/16
+TIPS:
+-----		Para grabar un programa que funcione:
+		* Al generarse con "$ make" los binarios el Makefile debe estar en separate mode para un flash de 512K. Configurar en mi caso el tamaño correspondiente. 
+		* Checkear el tamaño de webpages.espfs, si "$make htmlflash" dice que el binario es "too big!" eliminar carpetas del directorio html. Comentar lo que corresponda en la lista CGI de user_main.c
+		* Flashear con: $make flash; make blankflash; make htmlflash;
+			> Se necesita antes hacer un "$source tools/init.sh".
+Problema: 
+---------	Parece que con esphttpd 512K le queda corto como para meter webpages.espfs de libesphttpd.
+Compile tocando ESPFS_SIZE a 0x38000 para que entre, grabe exploto todo, volvi a ponerlo en 0x28000 y grabe todo menos el htmlflash y levanto todo lindo, peeero seguro algo queda roto, claramente esto anda pero no hay lugar, ver de hacer lugar o comprar mas flash.
+Desenlace:
+----------	Me di cuenta que comentando las lineas de la tabla CGI y eliminando del directorio html los correspondientes archivos, el binario webpages.espfs generado al compilarse en el Makefile se reducia drasticamente. 
+El mayor tamaño era causado por la foto de los gatos... 
+~~~~~~~~~~~~EOL~~~~~~~~~~~~
+
+-------------------------------------------------------------------------------
+>esptool.py flash_id
+Connecting...
+Manufacturer: c8
+Device: 4013
+El modulito tiene una memoria de 512K.
+Manufacturer c8 is GigaDevice and device 4013 is GD25Q40, which is a 4Mbit=512KByte device
+-------------------------------------------------------------------------------
+>esptool.py flash_id
+>esptool.py read_mac 
+Connecting...
+MAC: 18:fe:34:a0:b1:74
+-------------------------------------------------------------------------------
+Para que entren fw de tamaño grande hay que compilar como separate. Esto se configura entrando al make file y comentando la linea correspondiente casi al ppio.
+-------------------------------------------------------------------------------
+Web que habla del mismo modulo que tengo yo:
+http://kacangbawang.com/latest-at-firmware-for-esp8266-with-512k-flash/
+
+MAPA de MEMORIA	
+# ------------- 512K single slot --------------------
+# 0x00000 - 0x3DFFF (248kB) flash.bin ............ user code
+# 0x3E000 - 0x3FFFF (8kB)   master_device_key.bin
+# 0x40000 - 0x7DFFF (248kB) irom0text.bin ............ espressif's blobs
+# 0x7E000 - 0x7FFFF (8kB)   wifi config
+ 
+# ------------- 512K layout double slot --------------------
+# 0x00000 - 0x00FFF (4kB) 	boot.bin ............ 2nd stage bootldr
+# 0x01000 - 0x3DFFF (249kB) user1.bin ............ firmware 1 (both user code and blobs)
+# 0x3e000 - 0x3FFFF (8kB)master_device_key.bin
+# 0x40000 - 0	x40FFF (4kB)unused
+# 0x41000 - 0x7DFFF (249kB)user2.bin ............ 		firmware 2 (both user code and blobs)
+# 0x7e000 - 0x7FFFF (8kB)wifi config
+
+irom0text.bin = these are the espressif binary blobs
+flash.bin = this is the user code
