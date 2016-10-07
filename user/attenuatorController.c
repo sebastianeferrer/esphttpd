@@ -139,4 +139,5 @@ void attenuatorInit(void) {
 	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<CLOCK_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
 	PIN_FUNC_SELECT(OE_PIN, OE_PIN_FUNC);
 	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<OE_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
+	attenuatorController(0);
 }
