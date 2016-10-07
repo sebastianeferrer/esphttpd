@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ -z "$1" ]; then 
-	echo -e "Usage: serial.sh DEVICE [ttyUSB0, ...]"
+	sudo screen /dev/ttyUSB0 115200
 else
 	sudo screen /dev/$1 115200
 fi
