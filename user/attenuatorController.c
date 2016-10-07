@@ -1,6 +1,5 @@
 #include <esp8266.h>
 #include "attenuatorController.h"
-#include "io.h"
 
 #define CHANNELS    	16
 //pin states
