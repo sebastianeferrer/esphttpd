@@ -10,5 +10,7 @@ Change current attenuation: %attenuation_string% [dB]
 <input type="text" name="attenuation_db"><br>
 <input type="submit" value="Submit">
 </form>
+<ul>
+<li>If you haven't connected this device to your WLAN network now, you can <a href="/wifi">do so.</a></li>
 </div>
 </body></html>

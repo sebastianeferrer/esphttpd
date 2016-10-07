@@ -93,7 +93,6 @@ CgiUploadFlashDef uploadParams={
 	.fw2Pos=0,
 	.fwSize=ESPFS_SIZE,
 };
-//#define INCLUDE_FLASH_FNS
 #endif
 #ifdef OTA_FLASH_SIZE_K
 CgiUploadFlashDef uploadParams={
@@ -121,12 +120,6 @@ HttpdBuiltInUrl builtInUrls[]={
 	{"/", cgiRedirect, "/attenuatorController.tpl"},
 	{"/attenuatorController.tpl", cgiEspFsTemplate, tplAttenuationController},
 	{"/attenuatorController.cgi", cgiAttenuationController, NULL},
-#ifdef INCLUDE_FLASH_FNS
-	{"/flash/next", cgiGetFirmwareNext, &uploadParams},
-	{"/flash/upload", cgiUploadFirmware, &uploadParams},
-#endif
-	{"/flash/reboot", cgiRebootFirmware, NULL},
-
 	//Routines to make the /wifi URL and everything beneath it work.
 
 //Enable the line below to protect the WiFi configuration with an username/password combo.
