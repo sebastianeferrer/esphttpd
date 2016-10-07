@@ -132,13 +132,16 @@
 				Note: %WiFiapwarn%
 				</p>
 				<form name="wifiform" action="connect.cgi" method="post">
-				<p>
-				To connect to a WiFi network, please select one of the detected networks...<br>
-				<div id="aps">Scanning...</div>
-				<br>
-				WiFi password, if applicable: <br />
-				<input type="text" name="passwd" val="%WiFiPasswd%"> <br />
-				<p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="connect" value="Connect!" /></p>
+					<p>
+					To connect to a WiFi network, please select one of the detected networks...<br>
+					<div id="aps">Scanning...</div>
+						<br>
+						<div class="form_settings">
+								<p><span>WiFi password, if applicable:</span><input type="text" name="passwd" val="%WiFiPasswd%" /></p>
+								<p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="connect" value="Connect!" /></p>
+						</div>
+					</div>
+        </form>
 				</p>
       </div>
     </div>
