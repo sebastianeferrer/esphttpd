@@ -16,7 +16,6 @@ some pictures of cats.
 #include <esp8266.h>
 #include "httpd.h"
 #include "httpdespfs.h"
-#include "attenuatorController.h"
 #include "cgiwifi.h"
 #include "cgiflash.h"
 #include "stdout.h"
@@ -26,6 +25,8 @@ some pictures of cats.
 #include "webpages-espfs.h"
 #include "cgiwebsocket.h"
 
+#include "attenuatorController.h"
+#include "log.h"
 //The example can print out the heap use every 3 seconds. You can use this to catch memory leaks.
 //#define SHOW_HEAP_USE
 
@@ -117,9 +118,12 @@ should be placed above the URLs they protect.
 */
 HttpdBuiltInUrl builtInUrls[]={
 	{"*", cgiRedirectApClientToHostname, "attenuator.nonet"},
-	{"/", cgiRedirect, "/attenuatorController.tpl"},
-	{"/attenuatorController.tpl", cgiEspFsTemplate, tplAttenuationController},
+	{"/", cgiRedirect, "/index.html"},
+	{"/index", cgiRedirect, "/index.html"},
+	{"/attenuatorController.html", cgiEspFsTemplate, htmlAttenuationController},
 	{"/attenuatorController.cgi", cgiAttenuationController, NULL},
+	{"/log.html", cgiEspFsTemplate, htmlLog},
+	{"/log.cgi", cgiLog, NULL},
 	//Routines to make the /wifi URL and everything beneath it work.
 
 //Enable the line below to protect the WiFi configuration with an username/password combo.

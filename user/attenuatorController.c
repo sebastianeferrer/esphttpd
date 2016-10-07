@@ -76,12 +76,12 @@ int ICACHE_FLASH_ATTR cgiAttenuationController(HttpdConnData *connData) {
 		}
 	}
 
-	httpdRedirect(connData, "attenuatorController.tpl");
+	httpdRedirect(connData, "attenuatorController.html");
 	return HTTPD_CGI_DONE;
 }
 
 //Template code for the attenuationController page.
-int ICACHE_FLASH_ATTR tplAttenuationController(HttpdConnData *connData, char *token, void **arg) {
+int ICACHE_FLASH_ATTR htmlAttenuationController(HttpdConnData *connData, char *token, void **arg) {
 	char buff[128];
 	if (token==NULL) return HTTPD_CGI_DONE;
 
