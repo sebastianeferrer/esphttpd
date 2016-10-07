@@ -1,4 +1,8 @@
 ~~~~~~~~~~~~LOG~~~~~~~~~~~~
+07/09/16
+TIP:
+----		Con la app que se puede correr en wine podes configurar muchas cosas de chipito y del wifi.
+
 06/09/16
 TIPS:
 -----		Para grabar un programa que funcione:
