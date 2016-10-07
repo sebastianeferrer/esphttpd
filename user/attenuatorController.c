@@ -7,12 +7,22 @@
 #define LOW          	0
 #define HIGH      	1
 //GPIOS NUMBERS
-#define DATA_PIN    	13
-#define LATCH_PIN   	12
-#define CLOCK_PIN   	11
-#define OE_PIN      	10
-//
-#define DELAY_US    	10
+#define LATCH_PIN_NUMBER 	0
+#define DATA_PIN_NUMBER    	2
+#define CLOCK_PIN_NUMBER   	4
+#define OE_PIN_NUMBER      	5
+//PIN MUX REGs
+#define LATCH_PIN   	PERIPHS_IO_MUX_GPIO0_U
+#define DATA_PIN    	PERIPHS_IO_MUX_GPIO2_U
+#define CLOCK_PIN   	PERIPHS_IO_MUX_GPIO4_U
+#define OE_PIN      	PERIPHS_IO_MUX_GPIO5_U
+//GPIOS FUNTIONS
+#define LATCH_PIN_FUNC 	FUNC_GPIO0
+#define DATA_PIN_FUNC  	FUNC_GPIO2
+#define CLOCK_PIN_FUNC 	FUNC_GPIO4
+#define OE_PIN_FUNC    	FUNC_GPIO5
+//GENERAL
+#define DELAY_US    	1000
 
 unsigned int secuences[22]={
    10832,
@@ -54,10 +64,17 @@ int ICACHE_FLASH_ATTR cgiAttenuationController(HttpdConnData *connData) {
 
 	len=httpdFindArg(connData->post->buff, "attenuation_db", buff, sizeof(buff));
 	if (len!=0) {
-		os_strcpy(attenuation_string, buff);
-		attenuation_db=atoi(attenuation_string);
-		attenuatorController(attenuation_db);
-		os_printf("Attenuator setted at %d dB\n", attenuation_db);
+		attenuation_db=atoi(buff);
+		switch(attenuatorController(attenuation_db)){
+			case RV_SUCCESS:
+				os_strcpy(attenuation_string, buff);
+				os_printf("Attenuator setted at %d dB\n", attenuation_db);
+				break;
+			case RV_ILLEGAL:
+			default:
+				os_printf("\nAttenuator Controller: attenuation higher than possible.\n");
+				break;
+		}
 	}
 
 	httpdRedirect(connData, "attenuatorController.tpl");
@@ -77,34 +94,50 @@ int ICACHE_FLASH_ATTR tplAttenuationController(HttpdConnData *connData, char *to
 	return HTTPD_CGI_DONE;
 }
 
-void attenuatorController(unsigned int attenuation_db){
+retval_t attenuatorController(unsigned int attenuation_db){
 	unsigned int status=0;
 	unsigned int i=0;
-	unsigned int secuence=secuences[attenuation_db];
-
-	os_printf("\nAttenuator Controller:\n");
-	for(i=0;i<CHANNELS;i++){
-		status=secuence%2;
-		secuence=secuence/2;
-
-		if(status==0)
-		{
-			GPIO_OUTPUT_SET(DATA_PIN, LOW);
-			os_printf("0");
-		}
-		else if(status==1)
-		{
-			GPIO_OUTPUT_SET(DATA_PIN, HIGH);
-			os_printf("1");
-		}
-		GPIO_OUTPUT_SET(CLOCK_PIN, HIGH);
-		os_delay_us(DELAY_US);
-		GPIO_OUTPUT_SET(CLOCK_PIN, LOW);
-		os_delay_us(DELAY_US);      
+	unsigned int secuence=secuences[0];
+	if(attenuation_db>(sizeof(secuences)/sizeof(secuences[0]))){
+		return RV_ILLEGAL;
 	}
-	GPIO_OUTPUT_SET(LATCH_PIN, HIGH);
-	os_delay_us(DELAY_US);
-	GPIO_OUTPUT_SET(LATCH_PIN, LOW);
-	os_delay_us(DELAY_US);
-	os_printf("\n END OF PULSE TRAIN.\n");
+	else{
+		os_printf("\nAttenuator Controller:\n");
+		for(i=0;i<CHANNELS;i++){
+			status=secuence%2;
+			secuence=secuence/2;
+
+			if(status==0)
+			{
+				GPIO_OUTPUT_SET(DATA_PIN_NUMBER, LOW);
+				os_printf("0");
+			}
+			else if(status==1)
+			{
+				GPIO_OUTPUT_SET(DATA_PIN_NUMBER, HIGH);
+				os_printf("1");
+			}
+			GPIO_OUTPUT_SET(CLOCK_PIN_NUMBER, HIGH);
+			os_delay_us(DELAY_US);
+			GPIO_OUTPUT_SET(CLOCK_PIN_NUMBER, LOW);
+			os_delay_us(DELAY_US);      
+		}
+		GPIO_OUTPUT_SET(LATCH_PIN_NUMBER, HIGH);
+		os_delay_us(DELAY_US);
+		GPIO_OUTPUT_SET(LATCH_PIN_NUMBER, LOW);
+		os_delay_us(DELAY_US);
+		os_printf("\n END OF PULSE TRAIN.\n");
+		return RV_SUCCESS;
+	}
+}
+
+void attenuatorInit(void) {
+	PIN_FUNC_SELECT(DATA_PIN, DATA_PIN_FUNC);
+	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<DATA_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
+	PIN_FUNC_SELECT(LATCH_PIN, LATCH_PIN_FUNC);
+	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<LATCH_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
+	PIN_FUNC_SELECT(CLOCK_PIN, CLOCK_PIN_FUNC);
+	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<CLOCK_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
+	PIN_FUNC_SELECT(OE_PIN, OE_PIN_FUNC);
+	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<OE_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
 }

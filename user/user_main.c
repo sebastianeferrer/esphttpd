@@ -15,7 +15,6 @@ some pictures of cats.
 
 #include <esp8266.h>
 #include "httpd.h"
-#include "io.h"
 #include "httpdespfs.h"
 #include "attenuatorController.h"
 #include "cgiwifi.h"
@@ -157,7 +156,7 @@ static void ICACHE_FLASH_ATTR prHeapTimerCb(void *arg) {
 //Main routine. Initialize stdout, the I/O, filesystem and the webserver and we're done.
 void user_init(void) {
 	stdoutInit();
-	ioInit();
+	attenuatorInit();
 	captdnsInit();
 
 	// 0x40200000 is the base address for spi flash memory mapping, ESPFS_POS is the position
