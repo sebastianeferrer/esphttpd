@@ -117,7 +117,7 @@ general ones. Authorization things (like authBasic) act as a 'barrier' and
 should be placed above the URLs they protect.
 */
 HttpdBuiltInUrl builtInUrls[]={
-	{"*", cgiRedirectApClientToHostname, "attenuator.nonet"},
+	{"*", cgiRedirectApClientToHostname, "atenuador.local"},
 	{"/", cgiRedirect, "/index.html"},
 	{"/index", cgiRedirect, "/index.html"},
 	{"/attenuatorController.html", cgiEspFsTemplate, htmlAttenuationController},
