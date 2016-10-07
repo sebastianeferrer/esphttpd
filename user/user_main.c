@@ -17,7 +17,7 @@ some pictures of cats.
 #include "httpd.h"
 #include "io.h"
 #include "httpdespfs.h"
-#include "cgi.h"
+#include "attenuatorController.h"
 #include "cgiwifi.h"
 #include "cgiflash.h"
 #include "stdout.h"
@@ -26,7 +26,6 @@ some pictures of cats.
 #include "captdns.h"
 #include "webpages-espfs.h"
 #include "cgiwebsocket.h"
-#include "cgi-test.h"
 
 //The example can print out the heap use every 3 seconds. You can use this to catch memory leaks.
 //#define SHOW_HEAP_USE
@@ -119,16 +118,15 @@ general ones. Authorization things (like authBasic) act as a 'barrier' and
 should be placed above the URLs they protect.
 */
 HttpdBuiltInUrl builtInUrls[]={
-	{"*", cgiRedirectApClientToHostname, "esp8266.nonet"},
-	{"/", cgiRedirect, "/index.tpl"},
-//	{"/led.tpl", cgiEspFsTemplate, tplLed},
-	{"/index.tpl", cgiEspFsTemplate, tplCounter},
-//	{"/led.cgi", cgiLed, NULL},
+	{"*", cgiRedirectApClientToHostname, "attenuator.nonet"},
+	{"/", cgiRedirect, "/attenuatorController.tpl"},
+	{"/attenuatorController.tpl", cgiEspFsTemplate, tplAttenuationController},
+	{"/attenuatorController.cgi", cgiAttenuationController, NULL},
 #ifdef INCLUDE_FLASH_FNS
 	{"/flash/next", cgiGetFirmwareNext, &uploadParams},
 	{"/flash/upload", cgiUploadFirmware, &uploadParams},
 #endif
-//	{"/flash/reboot", cgiRebootFirmware, NULL},
+	{"/flash/reboot", cgiRebootFirmware, NULL},
 
 	//Routines to make the /wifi URL and everything beneath it work.
 
@@ -142,13 +140,6 @@ HttpdBuiltInUrl builtInUrls[]={
 	{"/wifi/connect.cgi", cgiWiFiConnect, NULL},
 	{"/wifi/connstatus.cgi", cgiWiFiConnStatus, NULL},
 	{"/wifi/setmode.cgi", cgiWiFiSetMode, NULL},
-
-//	{"/websocket/ws.cgi", cgiWebsocket, myWebsocketConnect},
-//	{"/websocket/echo.cgi", cgiWebsocket, myEchoWebsocketConnect},
-
-	{"/test", cgiRedirect, "/test/index.html"},
-	{"/test/", cgiRedirect, "/test/index.html"},
-	{"/test/test.cgi", cgiTestbed, NULL},
 
 	{"*", cgiEspFsHook, NULL}, //Catch-all cgi function for the filesystem
 	{NULL, NULL, NULL}

@@ -1,0 +1,14 @@
+<html><head><title>Test</title>
+</head>
+<body>
+<div id="main">
+<h1>Proyecto Medidas Electronicas II</h1>
+<p>
+Change current attenuation: %attenuation_string% [dB] 
+</p>
+<form method="post" action="attenuatorController.cgi">
+<input type="text" name="attenuation_db"><br>
+<input type="submit" value="Submit">
+</form>
+</div>
+</body></html>
