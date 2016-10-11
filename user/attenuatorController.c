@@ -1,27 +1,27 @@
 #include <esp8266.h>
 #include "attenuatorController.h"
 
-#define CHANNELS    	16
+#define CHANNELS    		16
 //pin states
-#define LOW          	0
-#define HIGH      	1
+#define LOW          		0
+#define HIGH      			1
 //GPIOS NUMBERS
 #define LATCH_PIN_NUMBER 	12
 #define DATA_PIN_NUMBER    	13
 #define CLOCK_PIN_NUMBER   	14
 #define OE_PIN_NUMBER      	15
 //PIN MUX REGs
-#define LATCH_PIN   	PERIPHS_IO_MUX_MTDI_U
-#define DATA_PIN    	PERIPHS_IO_MUX_MTCK_U
-#define CLOCK_PIN   	PERIPHS_IO_MUX_MTMS_U
-#define OE_PIN      	PERIPHS_IO_MUX_MTDO_U
+#define LATCH_PIN   		PERIPHS_IO_MUX_MTDI_U
+#define DATA_PIN    		PERIPHS_IO_MUX_MTCK_U
+#define CLOCK_PIN   		PERIPHS_IO_MUX_MTMS_U
+#define OE_PIN      		PERIPHS_IO_MUX_MTDO_U
 //GPIOS FUNTIONS
-#define LATCH_PIN_FUNC 	FUNC_GPIO12
-#define DATA_PIN_FUNC  	FUNC_GPIO13
-#define CLOCK_PIN_FUNC 	FUNC_GPIO14
-#define OE_PIN_FUNC    	FUNC_GPIO15
+#define LATCH_PIN_FUNC 		FUNC_GPIO12
+#define DATA_PIN_FUNC  		FUNC_GPIO13
+#define CLOCK_PIN_FUNC 		FUNC_GPIO14
+#define OE_PIN_FUNC    		FUNC_GPIO15
 //GENERAL
-#define DELAY_US    	1000
+#define DELAY_US    		1000
 
 unsigned int secuences[22]={
    10832,
