@@ -27,7 +27,7 @@ some pictures of cats.
 #include "io.h"
 #include "attenuatorController.h"
 #include "log.h"
-#include "rtc.h"
+
 //The example can print out the heap use every 3 seconds. You can use this to catch memory leaks.
 //#define SHOW_HEAP_USE
 
@@ -153,11 +153,11 @@ static void ICACHE_FLASH_ATTR prHeapTimerCb(void *arg) {
 
 //Main routine. Initialize stdout, the I/O, filesystem and the webserver and we're done.
 void user_init(void) {
-	stdoutInit();
+//	stdoutInit();
 	attenuatorInit();
 	captdnsInit();
-	ioInit();
-	rtc_init();
+//	ioInit();
+//	rtc_init();
 	// 0x40200000 is the base address for spi flash memory mapping, ESPFS_POS is the position
 	// where image is written in flash that is defined in Makefile.
 #ifdef ESPFS_POS
