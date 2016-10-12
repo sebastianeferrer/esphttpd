@@ -6,20 +6,20 @@
 #define LOW          		0
 #define HIGH      			1
 //GPIOS NUMBERS
-#define LATCH_PIN_NUMBER 	12
-#define DATA_PIN_NUMBER    	13
-#define CLOCK_PIN_NUMBER   	14
-#define OE_PIN_NUMBER      	15
+#define LATCH_PIN_NUMBER 	1
+#define DATA_PIN_NUMBER    	3
+#define CLOCK_PIN_NUMBER   	0
+#define OE_PIN_NUMBER      	2
 //PIN MUX REGs
-#define LATCH_PIN   		PERIPHS_IO_MUX_MTDI_U
-#define DATA_PIN    		PERIPHS_IO_MUX_MTCK_U
-#define CLOCK_PIN   		PERIPHS_IO_MUX_MTMS_U
-#define OE_PIN      		PERIPHS_IO_MUX_MTDO_U
+#define LATCH_PIN   		PERIPHS_IO_MUX_U0TXD_U
+#define DATA_PIN    		PERIPHS_IO_MUX_U0RXD_U
+#define CLOCK_PIN   		PERIPHS_IO_MUX_GPIO0_U
+#define OE_PIN      		PERIPHS_IO_MUX_GPIO2_U
 //GPIOS FUNTIONS
-#define LATCH_PIN_FUNC 		FUNC_GPIO12
-#define DATA_PIN_FUNC  		FUNC_GPIO13
-#define CLOCK_PIN_FUNC 		FUNC_GPIO14
-#define OE_PIN_FUNC    		FUNC_GPIO15
+#define LATCH_PIN_FUNC 		FUNC_GPIO1
+#define DATA_PIN_FUNC  		FUNC_GPIO3
+#define CLOCK_PIN_FUNC 		FUNC_GPIO0
+#define OE_PIN_FUNC    		FUNC_GPIO2
 //GENERAL
 #define DELAY_US    		1000
 
@@ -97,6 +97,7 @@ retval_t attenuatorController(unsigned int attenuation_db){
 	unsigned int status=0;
 	unsigned int i=0;
 	unsigned int secuence=secuences[0];
+	secuence=secuences[attenuation_db];
 	if(attenuation_db>(sizeof(secuences)/sizeof(secuences[0]))){
 		return RV_ILLEGAL;
 	}
@@ -139,5 +140,7 @@ void attenuatorInit(void) {
 	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<CLOCK_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
 	PIN_FUNC_SELECT(OE_PIN, OE_PIN_FUNC);
 	gpio_output_set(0/*set_mask*/, 0/*clear_mask*/, (1<<OE_PIN_NUMBER)/*enable_mask*/, 0/*disable_mask*/);
+	
+	GPIO_OUTPUT_SET(OE_PIN_NUMBER, LOW);
 	attenuatorController(0);
 }
