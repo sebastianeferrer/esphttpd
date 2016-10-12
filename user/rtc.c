@@ -1,8 +1,8 @@
-#include "ets_sys.h"
-#include "osapi.h"
-#include "user_interface.h"
+#include <esp8266.h>
 
 #define RTC_MAGIC 0x55aaaa55
+
+static ETSTimer rtc_test_t;
 
 typedef struct {
   uint64 timeAcc;
@@ -10,8 +10,7 @@ typedef struct {
   uint32 timeBase;
 } RTC_TIMER_DEMO;
 
-void rtcCount()
-{
+static void ICACHE_FLASH_ATTR rtcCount(void *arg) {
   RTC_TIMER_DEMO rtcTime;
   static uint8 count = 0;
   system_rtc_mem_read(64, &rtcTime, sizeof(rtcTime));
@@ -79,7 +78,6 @@ void rtcCount()
 
 void rtc_init(void)
 {
-  rtcCount();
   os_timer_disarm(&rtc_test_t);
   os_timer_setfn(&rtc_test_t, rtcCount, NULL);
   os_timer_arm(&rtc_test_t, 10000, 1);
