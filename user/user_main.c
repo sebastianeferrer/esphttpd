@@ -15,9 +15,7 @@ some pictures of cats.
 
 #include <esp8266.h>
 #include "httpd.h"
-#include "io.h"
 #include "httpdespfs.h"
-#include "cgi.h"
 #include "cgiwifi.h"
 #include "cgiflash.h"
 #include "stdout.h"
@@ -26,7 +24,9 @@ some pictures of cats.
 #include "captdns.h"
 #include "webpages-espfs.h"
 #include "cgiwebsocket.h"
-#include "cgi-test.h"
+#include "io.h"
+#include "attenuatorController.h"
+#include "log.h"
 
 //The example can print out the heap use every 3 seconds. You can use this to catch memory leaks.
 //#define SHOW_HEAP_USE
@@ -95,7 +95,6 @@ CgiUploadFlashDef uploadParams={
 	.fw2Pos=0,
 	.fwSize=ESPFS_SIZE,
 };
-#define INCLUDE_FLASH_FNS
 #endif
 #ifdef OTA_FLASH_SIZE_K
 CgiUploadFlashDef uploadParams={
@@ -119,36 +118,25 @@ general ones. Authorization things (like authBasic) act as a 'barrier' and
 should be placed above the URLs they protect.
 */
 HttpdBuiltInUrl builtInUrls[]={
-	{"*", cgiRedirectApClientToHostname, "esp8266.nonet"},
-	{"/", cgiRedirect, "/index.tpl"},
-	{"/led.tpl", cgiEspFsTemplate, tplLed},
-	{"/index.tpl", cgiEspFsTemplate, tplCounter},
-	{"/led.cgi", cgiLed, NULL},
-#ifdef INCLUDE_FLASH_FNS
-	{"/flash/next", cgiGetFirmwareNext, &uploadParams},
-	{"/flash/upload", cgiUploadFirmware, &uploadParams},
-#endif
-	{"/flash/reboot", cgiRebootFirmware, NULL},
-
-	//Routines to make the /wifi URL and everything beneath it work.
+	{"*", cgiRedirectApClientToHostname, "atenuador.nonet"},
+	{"/", cgiRedirect, "/index.html"},
+	{"/index", cgiRedirect, "/index.html"},
+	{"/attenuatorController.html", cgiEspFsTemplate, htmlAttenuationController},
+	{"/attenuatorController.cgi", cgiAttenuationController, NULL},
+	{"/log.html", cgiEspFsTemplate, htmlLog},
+	{"/log.cgi", cgiLog, NULL},
+//Routines to make the /wifi URL and everything beneath it work.
 
 //Enable the line below to protect the WiFi configuration with an username/password combo.
 //	{"/wifi/*", authBasic, myPassFn},
 
-	{"/wifi", cgiRedirect, "/wifi/wifi.tpl"},
-	{"/wifi/", cgiRedirect, "/wifi/wifi.tpl"},
+	{"/wifi", cgiRedirect, "/wifi/wifi.html"},
+	{"/wifi/", cgiRedirect, "/wifi/wifi.html"},
 	{"/wifi/wifiscan.cgi", cgiWiFiScan, NULL},
-	{"/wifi/wifi.tpl", cgiEspFsTemplate, tplWlan},
+	{"/wifi/wifi.html", cgiEspFsTemplate, tplWlan},
 	{"/wifi/connect.cgi", cgiWiFiConnect, NULL},
 	{"/wifi/connstatus.cgi", cgiWiFiConnStatus, NULL},
 	{"/wifi/setmode.cgi", cgiWiFiSetMode, NULL},
-
-	{"/websocket/ws.cgi", cgiWebsocket, myWebsocketConnect},
-	{"/websocket/echo.cgi", cgiWebsocket, myEchoWebsocketConnect},
-
-	{"/test", cgiRedirect, "/test/index.html"},
-	{"/test/", cgiRedirect, "/test/index.html"},
-	{"/test/test.cgi", cgiTestbed, NULL},
 
 	{"*", cgiEspFsHook, NULL}, //Catch-all cgi function for the filesystem
 	{NULL, NULL, NULL}
@@ -165,10 +153,11 @@ static void ICACHE_FLASH_ATTR prHeapTimerCb(void *arg) {
 
 //Main routine. Initialize stdout, the I/O, filesystem and the webserver and we're done.
 void user_init(void) {
-	stdoutInit();
-	ioInit();
+//	stdoutInit();
+	attenuatorInit();
 	captdnsInit();
-
+//	ioInit();
+//	rtc_init();
 	// 0x40200000 is the base address for spi flash memory mapping, ESPFS_POS is the position
 	// where image is written in flash that is defined in Makefile.
 #ifdef ESPFS_POS

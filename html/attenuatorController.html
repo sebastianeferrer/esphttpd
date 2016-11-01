@@ -1,43 +1,14 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-  <title>Index</title>
+  <title>Attenuator Controller</title>
   <meta name="description" content="website description" />
   <meta name="keywords" content="website keywords, website keywords" />
   <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
   <link rel="stylesheet" type="text/css" href="/style/style.css" />
-	<script type="text/javascript" src="140medley.min.js"></script>
-	<script type="text/javascript">
-
-	var xhr=j();
-
-
-	function getStatus() {
-		xhr.open("GET", "connstatus.cgi");
-		xhr.onreadystatechange=function() {
-			if (xhr.readyState==4 && xhr.status>=200 && xhr.status<300) {
-				var data=JSON.parse(xhr.responseText);
-				if (data.status=="idle") {
-					$("#status").innerHTML="Preparing to connect...";
-					window.setTimeout(getStatus, 1000);
-				} else if (data.status=="success") {
-					$("#status").innerHTML="Connected! Got IP "+data.ip+". If you're in the same network, you can access it <a href=\"http://"+data.ip+"/\">here</a>.";
-				} else if (data.status=="working") {
-					$("#status").innerHTML="Trying to connect to selected access point...";
-					window.setTimeout(getStatus, 1000);
-				} else if (data.status=="fail") {
-					$("#status").innerHTML="Connection failed. Check password and selected AP.<br /><a href=\"wifi.html\">Go Back</a>";
-				}
-			}
-		}
-		xhr.send();
-	}
-
-	window.onload=function(e) {
-		getStatus();
-	};
-	</script>
 </head>
+
 <body>
   <div id="main">
     <div id="header">
@@ -52,9 +23,9 @@
         <ul id="menu">
           <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
           <li><a href="/index.html">Principal</a></li>
-          <li><a href="/attenuatorController.html">Controlador</a></li>
+          <li class="selected"><a href="/attenuatorController.html">Controlador</a></li>
           <li><a href="/log.html">Logs</a></li>
-          <li class="selected"><a href="/wifi/wifi.html">Wifi</a></li>
+          <li><a href="/wifi/wifi.html">Wifi</a></li>
         </ul>
       </div>
     </div>
@@ -65,7 +36,7 @@
           <div class="sidebar_top"></div>
           <div class="sidebar_item">
             <!-- insert your sidebar items here -->
-						<h3>Log</h3>
+            <h3>Log</h3>
             <p>Ver como armar una lista con logs aca.<br /><a href="/log.html">Ver mas</a></p>
           </div>
           <div class="sidebar_base"></div>
@@ -87,12 +58,41 @@
       </div>
       <div id="content">
         <!-- insert the page content here -->
-					<div id="main">
-					<h2>Connecting to AP...</h2>
-					<p>Status:<br />
-					<div id="status">...</div>
-					</p>
-					</div>
+        <h2>Controlador de atenuacion</h2>
+        <form action="attenuatorController.cgi" method="post">
+          <div class="form_settings">
+            <p><span>Seleccione la atenuacion:</span><select id="id" name="attenuation_db">
+							<option value="0">0 dB</option>
+							<option value="1">1 dB</option>
+							<option value="2">2 dB</option>
+							<option value="3">3 dB</option>
+							<option value="4">4 dB</option>
+							<option value="5">5 dB</option>
+							<option value="6">6 dB</option>
+							<option value="7">7 dB</option>
+							<option value="8">8 dB</option>
+							<option value="9">9 dB</option>
+							<option value="10">10 dB</option>
+							<option value="11">11 dB</option>
+							<option value="12">12 dB</option>
+							<option value="13">13 dB</option>
+							<option value="14">14 dB</option>
+							<option value="15">15 dB</option>
+							<option value="16">16 dB</option>
+							<option value="17">17 dB</option>
+							<option value="18">18 dB</option>
+							<option value="19">19 dB</option>
+							<option value="20">20 dB</option>
+							<option value="21">21 dB</option>
+						</select></p>
+            <p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="name" value="Atenuar!" /></p>
+          </div>
+        </form>
+        <span class="center">
+					<h1><br></h1>
+					<h1>Atenuacion actual:</h1>
+					<h2>%attenuation_string% dB</h2>
+				</span>
       </div>
     </div>
     <div id="content_footer"></div>

@@ -1,43 +1,14 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-  <title>Index</title>
+  <title>Log</title>
   <meta name="description" content="website description" />
   <meta name="keywords" content="website keywords, website keywords" />
   <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
   <link rel="stylesheet" type="text/css" href="/style/style.css" />
-	<script type="text/javascript" src="140medley.min.js"></script>
-	<script type="text/javascript">
-
-	var xhr=j();
-
-
-	function getStatus() {
-		xhr.open("GET", "connstatus.cgi");
-		xhr.onreadystatechange=function() {
-			if (xhr.readyState==4 && xhr.status>=200 && xhr.status<300) {
-				var data=JSON.parse(xhr.responseText);
-				if (data.status=="idle") {
-					$("#status").innerHTML="Preparing to connect...";
-					window.setTimeout(getStatus, 1000);
-				} else if (data.status=="success") {
-					$("#status").innerHTML="Connected! Got IP "+data.ip+". If you're in the same network, you can access it <a href=\"http://"+data.ip+"/\">here</a>.";
-				} else if (data.status=="working") {
-					$("#status").innerHTML="Trying to connect to selected access point...";
-					window.setTimeout(getStatus, 1000);
-				} else if (data.status=="fail") {
-					$("#status").innerHTML="Connection failed. Check password and selected AP.<br /><a href=\"wifi.html\">Go Back</a>";
-				}
-			}
-		}
-		xhr.send();
-	}
-
-	window.onload=function(e) {
-		getStatus();
-	};
-	</script>
 </head>
+
 <body>
   <div id="main">
     <div id="header">
@@ -53,8 +24,8 @@
           <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
           <li><a href="/index.html">Principal</a></li>
           <li><a href="/attenuatorController.html">Controlador</a></li>
-          <li><a href="/log.html">Logs</a></li>
-          <li class="selected"><a href="/wifi/wifi.html">Wifi</a></li>
+          <li class="selected"><a href="/log.html">Logs</a></li>
+          <li><a href="/wifi/wifi.html">Wifi</a></li>
         </ul>
       </div>
     </div>
@@ -65,7 +36,7 @@
           <div class="sidebar_top"></div>
           <div class="sidebar_item">
             <!-- insert your sidebar items here -->
-						<h3>Log</h3>
+            <h3>Log</h3>
             <p>Ver como armar una lista con logs aca.<br /><a href="/log.html">Ver mas</a></p>
           </div>
           <div class="sidebar_base"></div>
@@ -87,12 +58,8 @@
       </div>
       <div id="content">
         <!-- insert the page content here -->
-					<div id="main">
-					<h2>Connecting to AP...</h2>
-					<p>Status:<br />
-					<div id="status">...</div>
-					</p>
-					</div>
+        <h1>Log</h1>
+        <p>FALTA HACER: VER DE PONER ALGO QUE LOGGEE LOS ESTADOS!!!</p>
       </div>
     </div>
     <div id="content_footer"></div>
